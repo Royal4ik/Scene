@@ -19,17 +19,17 @@ namespace Scene2d
 
         public void AddFigure(string name, IFigure figure)
         {
-            // добавление в словарь
+            this.figures.Add(name, figure);
         }
 
         public void CreateCompositeFigure(string name, IEnumerable<string> childFigures)
         {
-            // создаем фигуру с названием и ссылками
+            //this.compositeFigures.Add(name, childFigures);
         }
 
         public void DeleteFigure(string name)
         {
-            
+            this.figures.Remove(name);
         }
 
         public double CalulateArea(string name)

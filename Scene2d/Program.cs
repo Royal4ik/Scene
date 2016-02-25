@@ -3,6 +3,7 @@
     // начнем с прохождения отладчика по прямоугольнику
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Text;
 
@@ -14,30 +15,46 @@
         {
             var commandProducer = new CommandProducer();
             var scene = new Scene();
-
-            while (true)
+            using (var source = new StreamReader("Data/commands.txt", Encoding.UTF8))
             {
-                string line = Console.ReadLine();
-                System.String.Compare(line, "das", System.StringComparison.Ordinal);
-                if (line == null || line.Trim().Length == 0)
+                // initializes colors
+                string input;
+                var numberLine = 0;
+                while ((input = source.ReadLine()) != null)
                 {
-                    break;
-                }
-
-                try
-                {
-                    commandProducer.AppendLine(line);
-
-                    if (commandProducer.IsCommandReady)  //распознает одно- или многострочную программу
+                    if (input.Trim().Length == 0)
                     {
-                        var command = commandProducer.GetCommand();
-                        command.Apply(scene);
+                        break;                       
                     }
-                }
-                catch(BadFormatException)
-                {
-                    // out line number and error text
-                    // пользовательские exceptions (catch)
+
+                    numberLine++;
+
+                    try
+                    {
+                        if (input.Trim()[0] == '#')
+                        {
+                            continue;
+                        }
+
+                        commandProducer.AppendLine(input);
+
+                        if (commandProducer.IsCommandReady)
+                        {
+                            // распознает одно- или многострочную программу
+                            var command = commandProducer.GetCommand();
+                            command.Apply(scene);
+                        }
+                    }
+                    catch (BadFormatException ex)
+                    {
+                        Console.WriteLine("Произошла ошибка: " + ex.Message + "в строке - " + numberLine);
+                        // out line number and error text
+                        // пользовательские exceptions (catch)
+                    }
+                    catch (BadRectanglePointException ex)
+                    {
+                        Console.WriteLine("Произошла ошибка: " + ex.Message + "в строке - " + numberLine);
+                    }
                 }
 
                 // another exceptions handling

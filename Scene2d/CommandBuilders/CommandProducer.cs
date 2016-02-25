@@ -7,6 +7,8 @@
 
     using System.Text.RegularExpressions;
 
+    using Scene2d.Exceptions;
+
     public class CommandProducer : ICommandBuilder
     {
         private static Dictionary<Regex, Func<ICommandBuilder>> commands =
@@ -32,16 +34,25 @@
 
         public void AppendLine(string line)
         {
+            var isException = true;
             if (this.currentBuilder == null)
             {
                 foreach (var pair in commands)
                 {
-                    if (pair.Key.IsMatch(line))
+                    if (!pair.Key.IsMatch(line))
                     {
-                        this.currentBuilder = pair.Value();
-                        break;
+                        continue;
                     }
+
+                    isException = false;
+                    this.currentBuilder = pair.Value();
+                    break;
                 }
+            }
+
+            if (isException)
+            {
+                throw new BadFormatException("Неправильный формат ввода данных");
             }
 
             this.currentBuilder.AppendLine(line);
