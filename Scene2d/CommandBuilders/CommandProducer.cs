@@ -1,12 +1,11 @@
-п»їnamespace Scene2d
+namespace Scene2d.CommandBuilders
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
-
     using System.Text.RegularExpressions;
 
+    using Scene2d.Commands;
     using Scene2d.Exceptions;
 
     public class CommandProducer : ICommandBuilder
@@ -14,7 +13,7 @@
         private static Dictionary<Regex, Func<ICommandBuilder>> commands =
             new Dictionary<Regex, Func<ICommandBuilder>>
             {
-                { new Regex("^add rectangle .*"), () => new AddRectangleCommandBuilder() }  // СЂР°СЃРїРѕР·РЅР°РµС‚ Рё РїРµСЂРµРґР°РµС‚ РІ РІ Р±РёР»РґРµСЂ (СЃР»РѕРІР°СЂСЊ РєРѕРјР°РЅРґ)
+                { new Regex("^add rectangle .*"), () => new AddRectangleCommandBuilder() }  // распознает и передает в в билдер (словарь команд)
             };
 
         private ICommandBuilder currentBuilder;
@@ -37,13 +36,8 @@
             var isException = true;
             if (this.currentBuilder == null)
             {
-                foreach (var pair in commands)
+                foreach (var pair in commands.Where(pair => pair.Key.IsMatch(line)))
                 {
-                    if (!pair.Key.IsMatch(line))
-                    {
-                        continue;
-                    }
-
                     isException = false;
                     this.currentBuilder = pair.Value();
                     break;
@@ -52,7 +46,7 @@
 
             if (isException)
             {
-                throw new BadFormatException("РќРµРїСЂР°РІРёР»СЊРЅС‹Р№ С„РѕСЂРјР°С‚ РІРІРѕРґР° РґР°РЅРЅС‹С…");
+                throw new BadFormatException("Неправильный формат ввода данных");
             }
 
             this.currentBuilder.AppendLine(line);

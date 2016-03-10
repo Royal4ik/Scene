@@ -2,11 +2,10 @@
 {
     // начнем с прохождения отладчика по прямоугольнику
     using System;
-    using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
     using System.Text;
 
+    using Scene2d.CommandBuilders;
     using Scene2d.Exceptions;
 
     internal class Program
@@ -17,7 +16,6 @@
             var scene = new Scene();
             using (var source = new StreamReader("Data/commands.txt", Encoding.UTF8))
             {
-                // initializes colors
                 string input;
                 var numberLine = 0;
                 while ((input = source.ReadLine()) != null)
@@ -45,19 +43,14 @@
                             command.Apply(scene);
                         }
                     }
-                    catch (BadFormatException ex)
+                    catch (Exception ex)
                     {
                         Console.WriteLine("Произошла ошибка: " + ex.Message + "в строке - " + numberLine);
+
                         // out line number and error text
                         // пользовательские exceptions (catch)
                     }
-                    catch (BadRectanglePointException ex)
-                    {
-                        Console.WriteLine("Произошла ошибка: " + ex.Message + "в строке - " + numberLine);
-                    }
                 }
-
-                // another exceptions handling
             }
         }
     }

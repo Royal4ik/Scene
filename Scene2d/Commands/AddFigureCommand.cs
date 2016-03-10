@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Scene2d.Commands
+﻿namespace Scene2d.Commands
 {
+    using Scene2d.Figures;
+
     public class AddFigureCommand : ICommand
     {
         private readonly string name;

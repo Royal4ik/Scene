@@ -48,6 +48,7 @@
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="CommandBuilders\ICommandBuilder.cs" />
     <Compile Include="Exceptions\BadRectanglePointException.cs" />
+    <Compile Include="Figures\CompositeFigure.cs" />
     <Compile Include="Figures\ICompositeFigure.cs" />
     <Compile Include="Figures\IFigure.cs" />
     <Compile Include="Figures\RectangleFigure.cs" />

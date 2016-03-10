@@ -1,4 +1,4 @@
-﻿namespace Scene2d
+﻿namespace Scene2d.Commands
 {
     public interface ICommand
     {

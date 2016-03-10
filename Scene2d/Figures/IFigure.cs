@@ -1,9 +1,6 @@
-﻿namespace Scene2d
+﻿namespace Scene2d.Figures
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
 
     public interface IFigure : ICloneable
     {
