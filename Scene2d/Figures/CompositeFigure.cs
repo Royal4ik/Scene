@@ -15,7 +15,7 @@
 
         public object Clone()
         {
-           return this.ChildFigures.ToDictionary(figures => figures.Key, figures => figures.Value);
+            return this.ChildFigures.ToDictionary(figures => figures.Key + "copy", figures => (IFigure)figures.Value.Clone());
         }
 
         public double CalulateArea()
@@ -31,10 +31,18 @@
             var maxx = double.MinValue;
             foreach (var figures in this.ChildFigures.Values)
             {
-                maxx = Math.Max(figures.CalculateCircumscribingRectangle().Vertex1.X, maxx);
-                minx = Math.Min(figures.CalculateCircumscribingRectangle().Vertex1.X, minx);
-                maxy = Math.Max(figures.CalculateCircumscribingRectangle().Vertex1.X, maxy);
-                miny = Math.Min(figures.CalculateCircumscribingRectangle().Vertex1.X, miny);
+                maxx = Math.Max(
+                        Math.Max(figures.CalculateCircumscribingRectangle().Vertex1.X, maxx),
+                        figures.CalculateCircumscribingRectangle().Vertex2.X);
+                minx = Math.Min(
+                        Math.Min(figures.CalculateCircumscribingRectangle().Vertex1.X, minx), 
+                        figures.CalculateCircumscribingRectangle().Vertex2.X);
+                maxy = Math.Max(
+                        Math.Max(figures.CalculateCircumscribingRectangle().Vertex1.Y, maxy),
+                        figures.CalculateCircumscribingRectangle().Vertex2.Y);
+                miny = Math.Min(
+                        Math.Min(figures.CalculateCircumscribingRectangle().Vertex1.Y, miny),
+                        figures.CalculateCircumscribingRectangle().Vertex2.Y);
             }
 
             var minPoint = new Point { X = minx, Y = miny };

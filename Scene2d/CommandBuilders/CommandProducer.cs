@@ -36,11 +36,11 @@ namespace Scene2d.CommandBuilders
             var isException = true;
             if (this.currentBuilder == null)
             {
-                foreach (var pair in commands.Where(pair => pair.Key.IsMatch(line)))
+                var pair = commands.SingleOrDefault(pair1 => pair1.Key.IsMatch(line));
+                if (pair.Key != null)
                 {
                     isException = false;
                     this.currentBuilder = pair.Value();
-                    break;
                 }
             }
 
