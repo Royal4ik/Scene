@@ -1,5 +1,6 @@
 ﻿namespace Scene2d.Figures
 {
+    using System.Collections;
     using System.Collections.Generic;
 
     public interface ICompositeFigure : IFigure

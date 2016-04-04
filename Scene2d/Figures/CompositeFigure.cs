@@ -13,9 +13,10 @@
 
         public Dictionary<string, IFigure> ChildFigures { get; }
 
+
         public object Clone()
         {
-            return this.ChildFigures.ToDictionary(figures => figures.Key + "copy", figures => (IFigure)figures.Value.Clone());
+            return this.ChildFigures.ToDictionary(figures => figures.Key + "_copy", figures => (IFigure)figures.Value.Clone());
         }
 
         public double CalulateArea()

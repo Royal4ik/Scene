@@ -1,4 +1,4 @@
-﻿namespace Scene2d
+﻿namespace Scene2d.CommandBuilders
 {
     using Scene2d.Commands;
 

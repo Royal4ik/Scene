@@ -17,7 +17,7 @@
 
         public void AddFigure(string name, IFigure figure)
         {
-            if (!this.compositeFigures.ContainsKey(name) || !this.figures.ContainsKey(name))
+            if (!this.compositeFigures.ContainsKey(name) && !this.figures.ContainsKey(name))
             {
                 this.figures.Add(name, figure);
             }
@@ -29,18 +29,48 @@
 
         public void CreateCompositeFigure(string name, IEnumerable<string> childFigures)
         {
-            // this.compositeFigures.Add(name, childFigures);
+            var figureDictionary = new Dictionary<string, IFigure>();
+            foreach (var figureName in childFigures)
+            {
+                if (this.figures.ContainsKey(figureName))
+                {
+                    figureDictionary.Add(figureName, this.figures[figureName]);
+                }
+                else
+                {
+                    throw new Exception("Данного имени не существует в рамках сцены");
+                }
+            }
+
+            this.compositeFigures.Add(name, new CompositeFigure(figureDictionary));
         }
 
         public void DeleteFigure(string name)
         {
             if (this.compositeFigures.ContainsKey(name))
             {
-                this.figures.Remove(name);
+                foreach (var childFigures in this.compositeFigures[name].ChildFigures)
+                {
+                    this.figures.Remove(childFigures.Key);
+                }
+                
+                this.compositeFigures.Remove(name);
             }
             else if (this.figures.ContainsKey(name))
             {
                 this.figures.Remove(name);
+            }
+            else if (name == "Scene")
+            {
+                foreach (var figure in this.figures.Keys)
+                {
+                    this.figures.Remove(figure);
+                }
+
+                foreach (var compositivefigure in this.compositeFigures.Keys)
+                {
+                    this.compositeFigures.Remove(compositivefigure);
+                }
             }
             else
             {
@@ -103,6 +133,34 @@
             else if (this.figures.ContainsKey(name))
             {
                 this.figures[name].Rotate(angle);
+            }
+            else
+            {
+                throw new Exception("Данного имени не существует");
+            }
+        }
+
+        public void Copy(string name, string copyName)
+        {
+            if (this.compositeFigures.ContainsKey(name))
+            {
+                foreach (var childFigures in this.compositeFigures[name].ChildFigures)
+                {
+                    this.figures.Add(childFigures.Key+"_copy", (IFigure)childFigures.Value.Clone() );
+                }
+
+                this.compositeFigures.Add(copyName, (ICompositeFigure)this.compositeFigures[name].Clone());
+            }
+            else if (this.figures.ContainsKey(name))
+            {
+                this.figures.Add(copyName, (IFigure)this.figures[name].Clone());
+            }
+            else if (name == "Scene")
+            {
+                foreach (var figure in this.figures.Keys)
+                {
+                    this.figures.Add(figure + "_copy", (IFigure)this.figures[figure].Clone());
+                }
             }
             else
             {

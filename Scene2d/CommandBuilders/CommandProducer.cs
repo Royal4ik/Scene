@@ -13,7 +13,11 @@ namespace Scene2d.CommandBuilders
         private static Dictionary<Regex, Func<ICommandBuilder>> commands =
             new Dictionary<Regex, Func<ICommandBuilder>>
             {
-                { new Regex("^add rectangle .*"), () => new AddRectangleCommandBuilder() }  // распознает и передает в в билдер (словарь команд)
+                { new Regex("^add rectangle .*"), () => new AddRectangleCommandBuilder() },
+                { new Regex("^add circle .*"), () => new AddCircleCommandBuilder() },
+                { new Regex("^group .*"), () => new GroupFiguresCommandBuilder()},
+                { new Regex("^delete .*"), () => new DeleteFiguresCommandBuilder()},
+                { new Regex("^copy .*"), () => new GroupFiguresCommandBuilder()}
             };
 
         private ICommandBuilder currentBuilder;

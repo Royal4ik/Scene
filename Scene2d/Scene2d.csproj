@@ -41,13 +41,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Circle.cs" />
     <Compile Include="CommandBuilders\AddRectangleCommandBuilder.cs" />
+    <Compile Include="CommandBuilders\AddCircleCommandBuilder.cs" />
     <Compile Include="CommandBuilders\CommandProducer.cs" />
+    <Compile Include="CommandBuilders\CopyFiguresCommandBuilder.cs" />
+    <Compile Include="CommandBuilders\DeleteFiguresCommandBuilder.cs" />
+    <Compile Include="CommandBuilders\GroupFiguresCommandBuilder.cs" />
     <Compile Include="Commands\AddFigureCommand.cs" />
+    <Compile Include="Commands\CopyFiguresCommand.cs" />
+    <Compile Include="Commands\DeleteFiguresCommand.cs" />
+    <Compile Include="Commands\GroupFiguresCommand.cs" />
     <Compile Include="Exceptions\BadFormatException.cs" />
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="CommandBuilders\ICommandBuilder.cs" />
     <Compile Include="Exceptions\BadRectanglePointException.cs" />
+    <Compile Include="Figures\CircleFigure.cs" />
     <Compile Include="Figures\CompositeFigure.cs" />
     <Compile Include="Figures\ICompositeFigure.cs" />
     <Compile Include="Figures\IFigure.cs" />

@@ -9,7 +9,7 @@
 
     public class AddRectangleCommandBuilder : ICommandBuilder
     {
-        private static readonly Regex RecognizeRegex = new Regex(@"\w+\s\w+\s+([\w\d-_]+)\s+\((\d)+\,\s+(\d+)\)\s+\((\d)+\,\s+(\d+)\)\s*(#|\s*$)");
+        private static readonly Regex RecognizeRegex = new Regex(@"\w+\s\w+\s+([\w\d-_]+)\s+\((-?\d+)\,\s+(-?\d+)\)\s+\((-?\d+)\,\s+(-?\d+)\)\s*(#|\s*$)");
 
         private RectangleFigure rectangle;
 
