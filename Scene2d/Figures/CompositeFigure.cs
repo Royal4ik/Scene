@@ -16,7 +16,7 @@
 
         public object Clone()
         {
-            return this.ChildFigures.ToDictionary(figures => figures.Key + "_copy", figures => (IFigure)figures.Value.Clone());
+            return new CompositeFigure(this.ChildFigures.ToDictionary(figures => figures.Key + "_copy", figures => (IFigure)figures.Value.Clone()));
         }
 
         public double CalulateArea()
@@ -64,6 +64,14 @@
             foreach (var figures in this.ChildFigures.Values)
             {
                 figures.Rotate(angle);
+            }
+        }
+
+        public void Reflect(bool isUpright)
+        {
+            foreach (var figures in this.ChildFigures.Values)
+            {
+                figures.Reflect(isUpright);
             }
         }
     }

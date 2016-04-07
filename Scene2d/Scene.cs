@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using Scene2d.Figures;
 
@@ -29,20 +30,27 @@
 
         public void CreateCompositeFigure(string name, IEnumerable<string> childFigures)
         {
-            var figureDictionary = new Dictionary<string, IFigure>();
-            foreach (var figureName in childFigures)
+            if (!this.compositeFigures.ContainsKey(name) && !this.figures.ContainsKey(name))
             {
-                if (this.figures.ContainsKey(figureName))
+                var figureDictionary = new Dictionary<string, IFigure>();
+                foreach (var figureName in childFigures)
                 {
-                    figureDictionary.Add(figureName, this.figures[figureName]);
+                    if (this.figures.ContainsKey(figureName))
+                    {
+                        figureDictionary.Add(figureName, this.figures[figureName]);
+                    }
+                    else
+                    {
+                        throw new Exception($"Данного имени {figureName} не существует в рамках сцены");
+                    }
                 }
-                else
-                {
-                    throw new Exception("Данного имени не существует в рамках сцены");
-                }
-            }
 
-            this.compositeFigures.Add(name, new CompositeFigure(figureDictionary));
+                this.compositeFigures.Add(name, new CompositeFigure(figureDictionary));
+                }
+            else
+            {
+                throw new Exception("Данное имя композиции уже существует");
+            }
         }
 
         public void DeleteFigure(string name)
@@ -60,17 +68,10 @@
             {
                 this.figures.Remove(name);
             }
-            else if (name == "Scene")
+            else if (name == "scene")
             {
-                foreach (var figure in this.figures.Keys)
-                {
-                    this.figures.Remove(figure);
-                }
-
-                foreach (var compositivefigure in this.compositeFigures.Keys)
-                {
-                    this.compositeFigures.Remove(compositivefigure);
-                }
+                this.figures.Clear();
+                this.compositeFigures.Clear();
             }
             else
             {
@@ -87,7 +88,13 @@
 
             if (this.figures.ContainsKey(name))
             {
+                Console.WriteLine(this.figures[name].CalulateArea());
                 return this.figures[name].CalulateArea();
+            }
+
+            if (name == "scene")
+            {
+                return this.figures.Values.Sum(figure => figure.CalulateArea());
             }
 
             throw new Exception("Данного имени не существует");
@@ -105,7 +112,34 @@
                 return this.figures[name].CalculateCircumscribingRectangle();
             }
 
-            throw new Exception("Данного имени не существует");
+            if (name != "scene")
+            {
+                throw new Exception("Данного имени не существует");
+            }
+
+            var minx = double.MaxValue;
+            var miny = double.MaxValue;
+            var maxy = double.MinValue;
+            var maxx = double.MinValue;
+            foreach (var figure in this.figures.Values)
+            {
+                maxx = Math.Max(
+                    Math.Max(figure.CalculateCircumscribingRectangle().Vertex1.X, maxx),
+                    figure.CalculateCircumscribingRectangle().Vertex2.X);
+                minx = Math.Min(
+                    Math.Min(figure.CalculateCircumscribingRectangle().Vertex1.X, minx),
+                    figure.CalculateCircumscribingRectangle().Vertex2.X);
+                maxy = Math.Max(
+                    Math.Max(figure.CalculateCircumscribingRectangle().Vertex1.Y, maxy),
+                    figure.CalculateCircumscribingRectangle().Vertex2.Y);
+                miny = Math.Min(
+                    Math.Min(figure.CalculateCircumscribingRectangle().Vertex1.Y, miny),
+                    figure.CalculateCircumscribingRectangle().Vertex2.Y);
+            }
+
+            var minPoint = new Point { X = minx, Y = miny };
+            var maxPoint = new Point { X = maxx, Y = maxy };
+            return new Rectangle { Vertex1 = minPoint, Vertex2 = maxPoint };
         }
 
         public void Move(string name, Point vector)
@@ -117,6 +151,13 @@
             else if (this.figures.ContainsKey(name))
             {
                 this.figures[name].Move(vector);
+            }
+            else if (name == "scene")
+            {
+                foreach (var figure in this.figures.Values)
+                {
+                    figure.Move(vector);
+                }
             }
             else
             {
@@ -134,6 +175,36 @@
             {
                 this.figures[name].Rotate(angle);
             }
+            else if (name == "scene")
+            {
+                foreach (var figure in this.figures.Values)
+                {
+                    figure.Rotate(angle);
+                }
+            }
+            else
+            {
+                throw new Exception("Данного имени не существует");
+            }
+        }
+
+        public void Reflect(string name, bool isUpright)
+        {
+            if (this.compositeFigures.ContainsKey(name))
+            {
+                this.compositeFigures[name].Reflect(isUpright);
+            }
+            else if (this.figures.ContainsKey(name))
+            {
+                this.figures[name].Reflect(isUpright);
+            }
+            else if (name == "scene")
+            {
+                foreach (var figure in this.figures.Values)
+                {
+                    figure.Reflect(isUpright);
+                }
+            }
             else
             {
                 throw new Exception("Данного имени не существует");
@@ -144,24 +215,27 @@
         {
             if (this.compositeFigures.ContainsKey(name))
             {
-                foreach (var childFigures in this.compositeFigures[name].ChildFigures)
+                var copyFiguresClone = (ICompositeFigure)this.compositeFigures[name].Clone();
+                this.compositeFigures.Add(copyName, copyFiguresClone);
+                foreach (var childFigures in copyFiguresClone.ChildFigures)
                 {
-                    this.figures.Add(childFigures.Key+"_copy", (IFigure)childFigures.Value.Clone() );
-                }
-
-                this.compositeFigures.Add(copyName, (ICompositeFigure)this.compositeFigures[name].Clone());
+                    this.figures.Add(childFigures.Key, childFigures.Value );
+                }        
             }
+
             else if (this.figures.ContainsKey(name))
             {
                 this.figures.Add(copyName, (IFigure)this.figures[name].Clone());
             }
-            else if (name == "Scene")
+
+            else if (name == "scene")
             {
                 foreach (var figure in this.figures.Keys)
                 {
                     this.figures.Add(figure + "_copy", (IFigure)this.figures[figure].Clone());
                 }
             }
+
             else
             {
                 throw new Exception("Данного имени не существует");

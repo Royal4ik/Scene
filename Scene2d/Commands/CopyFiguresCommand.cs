@@ -1,8 +1,6 @@
 ﻿
 namespace Scene2d.Commands
 {
-    using System;
-
     public class CopyFiguresCommand : ICommand
     {
         private readonly string name;

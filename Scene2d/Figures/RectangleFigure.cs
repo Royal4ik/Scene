@@ -71,5 +71,9 @@
                 throw new Exception("Количество градусов должно быть кратно 90");
             }
         }
+
+        public void Reflect(bool isUpright)
+        {
+        }
     }
 }

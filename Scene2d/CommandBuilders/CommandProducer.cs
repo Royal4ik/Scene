@@ -10,14 +10,19 @@ namespace Scene2d.CommandBuilders
 
     public class CommandProducer : ICommandBuilder
     {
-        private static Dictionary<Regex, Func<ICommandBuilder>> commands =
+        private static readonly Dictionary<Regex, Func<ICommandBuilder>> Commands =
             new Dictionary<Regex, Func<ICommandBuilder>>
             {
                 { new Regex("^add rectangle .*"), () => new AddRectangleCommandBuilder() },
                 { new Regex("^add circle .*"), () => new AddCircleCommandBuilder() },
                 { new Regex("^group .*"), () => new GroupFiguresCommandBuilder()},
                 { new Regex("^delete .*"), () => new DeleteFiguresCommandBuilder()},
-                { new Regex("^copy .*"), () => new GroupFiguresCommandBuilder()}
+                { new Regex("^copy .*"), () => new GroupFiguresCommandBuilder()},
+                { new Regex("^move .*"), () => new MoveFiguresCommandBuilder()},
+                { new Regex("^rotate .*"), () => new RotateFiguresCommandBuilder()},
+                { new Regex("^reflect .*"), () => new RotateFiguresCommandBuilder()},
+                { new Regex("^print area for .*"), () => new PrintAreaFiguresCommandBuilder()},
+                { new Regex("^print circumscribing rectangle for .*"), () => new PrintCircumscribingRectangleCommandBuilder()}
             };
 
         private ICommandBuilder currentBuilder;
@@ -26,12 +31,7 @@ namespace Scene2d.CommandBuilders
         {
             get
             {
-                if (this.currentBuilder == null)
-                {
-                    return false;
-                }
-
-                return this.currentBuilder.IsCommandReady;
+                return this.currentBuilder != null && this.currentBuilder.IsCommandReady;
             }
         }
 
@@ -40,7 +40,7 @@ namespace Scene2d.CommandBuilders
             var isException = true;
             if (this.currentBuilder == null)
             {
-                var pair = commands.SingleOrDefault(pair1 => pair1.Key.IsMatch(line));
+                var pair = Commands.SingleOrDefault(pair1 => pair1.Key.IsMatch(line));
                 if (pair.Key != null)
                 {
                     isException = false;

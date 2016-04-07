@@ -11,5 +11,7 @@
         void Move(Point vector);
 
         void Rotate(double angle);
+
+        void Reflect(bool isUpright);
     }
 }

@@ -6,7 +6,6 @@
     using System.Text;
 
     using Scene2d.CommandBuilders;
-    using Scene2d.Exceptions;
 
     internal class Program
     {
@@ -46,12 +45,11 @@
                     catch (Exception ex)
                     {
                         Console.WriteLine("Произошла ошибка"+ "в строке - " + numberLine + ": " + ex.Message);
-
-                        // out line number and error text
-                        // пользовательские exceptions (catch)
                     }
                 }
             }
+
+            Console.ReadLine();
         }
     }
 }

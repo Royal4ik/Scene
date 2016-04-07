@@ -7,7 +7,7 @@
 
     public class CopyFiguresCommandBuilder : ICommandBuilder
     {
-        private static readonly Regex RecognizeRegex = new Regex(@"\w+\s+([\w\d-_]+)\s+to\s+([\w\d-_]+)\s*(#|$)");
+        private static readonly Regex RecognizeRegex = new Regex(@"\w+\s+(scene|([\w\d-_]+)\s+to\s+([\w\d-_]+))\s*(#|$)");
 
         private string name;
 
@@ -26,8 +26,16 @@
             if (RecognizeRegex.IsMatch(line))
             {
                 var match = RecognizeRegex.Match(line);
-                this.name = match.Groups[1].ToString();
-                this.copyName = match.Groups[2].ToString();
+                if (match.Groups[1].ToString() != "scene")
+                {
+                    this.name = match.Groups[2].ToString();
+                    this.copyName = match.Groups[3].ToString();
+                }
+                else
+                {
+                    this.name = match.Groups[1].ToString();
+                    this.copyName = "";
+                }
             }
             else
             {

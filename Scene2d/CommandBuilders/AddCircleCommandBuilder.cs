@@ -1,9 +1,6 @@
 ﻿namespace Scene2d.CommandBuilders
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
     using System.Text.RegularExpressions;
     using Scene2d.Commands;
     using Scene2d.Figures;

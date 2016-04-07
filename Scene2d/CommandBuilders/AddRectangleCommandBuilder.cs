@@ -4,7 +4,6 @@
     using System.Text.RegularExpressions;
 
     using Scene2d.Commands;
-    using Scene2d.Exceptions;
     using Scene2d.Figures;
 
     public class AddRectangleCommandBuilder : ICommandBuilder

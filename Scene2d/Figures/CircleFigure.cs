@@ -1,9 +1,6 @@
 ﻿namespace Scene2d.Figures
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
 
     public class CircleFigure : IFigure
     {
@@ -41,6 +38,10 @@
         }
 
         public void Rotate(double angle)
+        {
+        }
+
+        public void Reflect(bool isUpright)
         {
         }
     }
