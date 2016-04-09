@@ -17,12 +17,13 @@ namespace Scene2d.CommandBuilders
                 { new Regex("^add circle .*"), () => new AddCircleCommandBuilder() },
                 { new Regex("^group .*"), () => new GroupFiguresCommandBuilder()},
                 { new Regex("^delete .*"), () => new DeleteFiguresCommandBuilder()},
-                { new Regex("^copy .*"), () => new GroupFiguresCommandBuilder()},
+                { new Regex("^copy .*"), () => new CopyFiguresCommandBuilder()},
                 { new Regex("^move .*"), () => new MoveFiguresCommandBuilder()},
                 { new Regex("^rotate .*"), () => new RotateFiguresCommandBuilder()},
                 { new Regex("^reflect .*"), () => new RotateFiguresCommandBuilder()},
                 { new Regex("^print area for .*"), () => new PrintAreaFiguresCommandBuilder()},
-                { new Regex("^print circumscribing rectangle for .*"), () => new PrintCircumscribingRectangleCommandBuilder()}
+                { new Regex("^print circumscribing rectangle for .*"), () => new PrintCircumscribingRectangleCommandBuilder()},         
+                { new Regex(@"^(add polygon|\s\sadd point|end polygon)(.*|$)"), () => new AddPolygonCommandBuilder()}
             };
 
         private ICommandBuilder currentBuilder;
@@ -38,16 +39,24 @@ namespace Scene2d.CommandBuilders
         public void AppendLine(string line)
         {
             var isException = true;
+            var pair = Commands.SingleOrDefault(pair1 => pair1.Key.IsMatch(line));
             if (this.currentBuilder == null)
             {
-                var pair = Commands.SingleOrDefault(pair1 => pair1.Key.IsMatch(line));
+                
                 if (pair.Key != null)
                 {
                     isException = false;
                     this.currentBuilder = pair.Value();
                 }
             }
-
+            else
+            {
+                if ((pair.Key == null) || (pair.Value().GetType() != this.currentBuilder.GetType()))
+                {
+                    throw new Exception("Отсутствует end polygon");
+                }
+                isException = false;
+            }
             if (isException)
             {
                 throw new BadFormatException("Неправильный формат ввода данных");

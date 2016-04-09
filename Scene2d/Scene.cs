@@ -88,7 +88,6 @@
 
             if (this.figures.ContainsKey(name))
             {
-                Console.WriteLine(this.figures[name].CalulateArea());
                 return this.figures[name].CalulateArea();
             }
 

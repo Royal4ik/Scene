@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Circle.cs" />
+    <Compile Include="CommandBuilders\AddPolygonCommandBuilder.cs" />
     <Compile Include="CommandBuilders\AddRectangleCommandBuilder.cs" />
     <Compile Include="CommandBuilders\AddCircleCommandBuilder.cs" />
     <Compile Include="CommandBuilders\CommandProducer.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="Figures\CompositeFigure.cs" />
     <Compile Include="Figures\ICompositeFigure.cs" />
     <Compile Include="Figures\IFigure.cs" />
+    <Compile Include="Figures\PolygonFigure.cs" />
     <Compile Include="Figures\RectangleFigure.cs" />
     <Compile Include="Point.cs" />
     <Compile Include="Program.cs" />
