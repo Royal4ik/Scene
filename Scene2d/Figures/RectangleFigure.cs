@@ -35,8 +35,6 @@
             this.rectangle.Vertex2 = this.rectangle.Vertex2 + vector;
         }
 
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Reviewed. Suppression is OK here.")]
-        [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1407:ArithmeticExpressionsMustDeclarePrecedence", Justification = "Reviewed. Suppression is OK here.")]
         public void Rotate(double angle)
         {
             const double Eps = 0.00001;

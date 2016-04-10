@@ -15,7 +15,7 @@
 
         private static readonly Regex RecognizeRegexEnd = new Regex(@"end polygon\s*(#|$)");
 
-        private List<Point> polygonPoints = new List<Point>();
+        private readonly List<Point> polygonPoints = new List<Point>();
 
         private PolygonFigure polygon;
 
@@ -24,21 +24,21 @@
         private static bool IsIntersection(List<Point> polygonPoints)
         {
             const double Epsilon = 0.000001;
-            var pointsPolygonTemp = new List<Point>();
-            pointsPolygonTemp.AddRange(polygonPoints);
-            pointsPolygonTemp.Add(pointsPolygonTemp[0]);
-            for (var i = 0; i < pointsPolygonTemp.Count - 1; i++)
+            var polygonPointsTemp = new List<Point>();
+            polygonPointsTemp.AddRange(polygonPoints);
+            polygonPointsTemp.Add(polygonPointsTemp[0]);
+            for (var i = 0; i < polygonPointsTemp.Count - 1; i++)
             {
-                var beginFirstSegment = pointsPolygonTemp[i];
-                var endFirstSegment = pointsPolygonTemp[i + 1];
+                var beginFirstSegment = polygonPointsTemp[i];
+                var endFirstSegment = polygonPointsTemp[i + 1];
                 var x1 = beginFirstSegment.X;
                 var y1 = beginFirstSegment.Y;
                 var x2 = endFirstSegment.X;
                 var y2 = endFirstSegment.Y;
-                for (var j = i; j < pointsPolygonTemp.Count - 1; j++)
+                for (var j = i; j < polygonPointsTemp.Count - 1; j++)
                 {
-                    var startSecondSegment = pointsPolygonTemp[j];
-                    var endSecondSegment = pointsPolygonTemp[j + 1];
+                    var startSecondSegment = polygonPointsTemp[j];
+                    var endSecondSegment = polygonPointsTemp[j + 1];
                     if (beginFirstSegment.Equals(endSecondSegment) | beginFirstSegment.Equals(startSecondSegment) |
                     endFirstSegment.Equals(endSecondSegment) | endFirstSegment.Equals(startSecondSegment))
                     {
@@ -170,8 +170,13 @@
             else if (RecognizeRegexAdd.IsMatch(line))
             {
                 var match = RecognizeRegexAdd.Match(line);
-                this.polygonPoints.Add(new Point(Convert.ToDouble(match.Groups[1].Value), Convert.ToDouble(match.Groups[2].Value)));
-                if (IsIntersection(this.polygonPoints))
+                var newPolygonPoint = new Point(
+                    Convert.ToDouble(match.Groups[1].Value),
+                    Convert.ToDouble(match.Groups[2].Value));
+                var isCoincided = this.polygonPoints.Contains(newPolygonPoint);
+                this.polygonPoints.Add(newPolygonPoint);
+                
+                if (IsIntersection(this.polygonPoints) || isCoincided)
                 {
                     throw new Exception("Точка полигона совпадает с одной из предыдущих или образует пересечение с одной из предыдущих сторон");
                 }                 

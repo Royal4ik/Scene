@@ -4,7 +4,7 @@
     {
         private readonly string name;
 
-        private Point vector;
+        private readonly Point vector;
 
         public MoveFiguresCommand(string name, Point vector)
         {

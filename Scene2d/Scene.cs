@@ -8,8 +8,6 @@
 
     public class Scene
     {
-        // possible implementation of figures storage
-        // feel free to use your own!
         private readonly Dictionary<string, IFigure> figures =
             new Dictionary<string, IFigure>();
 
@@ -240,8 +238,5 @@
                 throw new Exception("Данного имени не существует");
             }
         }
-
-        // another methods for figures manipulation
-        // adding, removing etc
     }
 }

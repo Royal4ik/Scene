@@ -2,7 +2,7 @@
 {
     public class PrintAreaCommand : ICommand
     {
-        private string name;
+        private readonly string name;
 
         public PrintAreaCommand(string name)
         {

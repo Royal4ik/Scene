@@ -57,14 +57,6 @@
             {
                 throw new Exception("Неправильный формат ввода данных");
             }
-
-            // check recognizeRegex
-            //
-            // if correct select params of rectangle
-            // this.name = ...
-            // this.rectangle = new Rectangle(p1, p2)
-            //
-            // if not correct throw BadFormatException
         }
 
         public ICommand GetCommand()

@@ -1,6 +1,5 @@
 ﻿namespace Scene2d
 {
-    // начнем с прохождения отладчика по прямоугольнику
     using System;
     using System.IO;
     using System.Text;
@@ -37,7 +36,6 @@
 
                         if (commandProducer.IsCommandReady)
                         {
-                            // распознает одно- или многострочную программу
                             var command = commandProducer.GetCommand();
                             command.Apply(scene);
                         }
