@@ -63,10 +63,8 @@
     <Compile Include="Commands\PrintCircumscribingRectangleCommand.cs" />
     <Compile Include="Commands\ReflectFiguresCommand.cs" />
     <Compile Include="Commands\RotateFiguresCommand.cs" />
-    <Compile Include="Exceptions\BadFormatException.cs" />
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="CommandBuilders\ICommandBuilder.cs" />
-    <Compile Include="Exceptions\BadRectanglePointException.cs" />
     <Compile Include="Figures\CircleFigure.cs" />
     <Compile Include="Figures\CompositeFigure.cs" />
     <Compile Include="Figures\ICompositeFigure.cs" />

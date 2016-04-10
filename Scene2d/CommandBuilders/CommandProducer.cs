@@ -6,7 +6,6 @@ namespace Scene2d.CommandBuilders
     using System.Text.RegularExpressions;
 
     using Scene2d.Commands;
-    using Scene2d.Exceptions;
 
     public class CommandProducer : ICommandBuilder
     {
@@ -63,7 +62,7 @@ namespace Scene2d.CommandBuilders
 
             if (isException)
             {
-                throw new BadFormatException("Неправильный формат ввода данных");
+                throw new Exception("Неправильный формат ввода данных");
             }
 
             this.currentBuilder.AppendLine(line);
