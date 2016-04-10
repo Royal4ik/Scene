@@ -42,7 +42,7 @@
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine("Произошла ошибка"+ "в строке - " + numberLine + ": " + ex.Message);
+                        Console.WriteLine("Произошла ошибка" + "в строке - " + numberLine + ": " + ex.Message);
                     }
                 }
             }

@@ -17,7 +17,7 @@
         {
             get
             {
-                return (this.name != null && this.copyName != null);
+                return this.name != null && this.copyName != null;
             }
         }
 
@@ -34,7 +34,7 @@
                 else
                 {
                     this.name = match.Groups[1].ToString();
-                    this.copyName = "";
+                    this.copyName = string.Empty;
                 }
             }
             else

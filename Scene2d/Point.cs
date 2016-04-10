@@ -2,15 +2,15 @@
 {
     public struct Point
     {
-        public double X { get; set; }
-
-        public double Y { get; set; }
-
         public Point(double newX, double newY)
         {
             this.X = newX;
             this.Y = newY;
         }
+
+        public double X { get; set; }
+
+        public double Y { get; set; }
 
         public static Point operator +(Point first, Point second)
         {

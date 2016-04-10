@@ -1,8 +1,9 @@
 ﻿namespace Scene2d.CommandBuilders
 {
-    using Scene2d.Commands;
     using System;
     using System.Text.RegularExpressions;
+
+    using Scene2d.Commands;
 
     public class RotateFiguresCommandBuilder : ICommandBuilder
     {
@@ -19,6 +20,7 @@
                 return this.name != null;
             }
         }
+
         public void AppendLine(string line)
         {
             if (RecognizeRegex.IsMatch(line))

@@ -20,6 +20,7 @@
                 return this.name != null;
             }
         }
+
         public void AppendLine(string line)
         {
             if (RecognizeRegex.IsMatch(line))

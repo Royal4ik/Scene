@@ -14,24 +14,6 @@
             this.polygon = polygon;
         }
 
-        private static Point[] FindExtremePoint(List<Point> polygon)
-        {
-            var minx = double.MaxValue;
-            var miny = double.MaxValue;
-            var maxy = double.MinValue;
-            var maxx = double.MinValue;
-
-            foreach (var point in polygon)
-            {
-                minx = Math.Min(minx, point.X);
-                maxx = Math.Max(maxx, point.X);
-                miny = Math.Min(miny, point.Y);
-                maxy = Math.Max(maxy, point.Y);
-            }
-
-            return new[] { new Point { X = minx, Y = miny }, new Point { X = maxx, Y = maxy } };
-        }
-
         public object Clone()
         {
             return new PolygonFigure(this.polygon.ToList());
@@ -95,16 +77,34 @@
             {
                 for (var i = 0; i < this.polygon.Count; i++)
                 {
-                    this.polygon[i] = new Point(2 * center.X - this.polygon[i].X, this.polygon[i].Y);
+                    this.polygon[i] = new Point((2 * center.X) - this.polygon[i].X, this.polygon[i].Y);
                 }
             }
             else
             {
                 for (var i = 0; i < this.polygon.Count; i++)
                 {
-                    this.polygon[i] = new Point(this.polygon[i].X, 2 * center.Y * this.polygon[i].Y);
+                    this.polygon[i] = new Point(this.polygon[i].X, (2 * center.Y) - this.polygon[i].Y);
                 }
             }
+        }
+
+        private static Point[] FindExtremePoint(List<Point> polygon)
+        {
+            var minx = double.MaxValue;
+            var miny = double.MaxValue;
+            var maxy = double.MinValue;
+            var maxx = double.MinValue;
+
+            foreach (var point in polygon)
+            {
+                minx = Math.Min(minx, point.X);
+                maxx = Math.Max(maxx, point.X);
+                miny = Math.Min(miny, point.Y);
+                maxy = Math.Max(maxy, point.Y);
+            }
+
+            return new[] { new Point { X = minx, Y = miny }, new Point { X = maxx, Y = maxy } };
         }
     }
 }

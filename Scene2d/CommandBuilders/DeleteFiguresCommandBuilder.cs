@@ -12,11 +12,13 @@
         private string name;
 
         public bool IsCommandReady
-        { get
+        {
+            get
             {
                 return this.name != null;
             }
         }
+
         public void AppendLine(string line)
         {
             if (RecognizeRegex.IsMatch(line))

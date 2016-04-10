@@ -21,6 +21,52 @@
 
         private string name;
 
+        public bool IsCommandReady { get; set; }
+
+        public void AppendLine(string line)
+        {
+            if (RecognizeRegexStart.IsMatch(line))
+            {
+                var match = RecognizeRegexStart.Match(line);
+                this.name = match.Groups[1].ToString();
+            }
+            else if (RecognizeRegexEnd.IsMatch(line))
+            {
+                if (this.polygonPoints.Count >= 3)
+                {
+                    this.polygon = new PolygonFigure(this.polygonPoints);
+                    this.IsCommandReady = true;
+                }
+                else
+                {
+                    throw new Exception("Количество точек полигона должно быть больше 2");
+                }
+            }
+            else if (RecognizeRegexAdd.IsMatch(line))
+            {
+                var match = RecognizeRegexAdd.Match(line);
+                var newPolygonPoint = new Point(
+                    Convert.ToDouble(match.Groups[1].Value),
+                    Convert.ToDouble(match.Groups[2].Value));
+                var isCoincided = this.polygonPoints.Contains(newPolygonPoint);
+                this.polygonPoints.Add(newPolygonPoint);
+                
+                if (isCoincided || IsIntersection(this.polygonPoints))
+                {
+                    throw new Exception("Точка полигона совпадает с одной из предыдущих или образует пересечение с одной из предыдущих сторон");
+                }                 
+            }
+            else
+            {
+                throw new Exception("Неправильный формат ввода данных");
+            }
+        }
+
+        public ICommand GetCommand()
+        {
+            return new AddFigureCommand(this.name, this.polygon);
+        }
+
         private static bool IsIntersection(List<Point> polygonPoints)
         {
             const double Epsilon = 0.000001;
@@ -71,7 +117,7 @@
                             else
                             {
                                 var k = (y4 - y3) / (x4 - x3);
-                                y = k * x - (x3 * y4 - x4 * y3) / k;
+                                y = (k * x) - (((x3 * y4) - (x4 * y3)) / k);
                             }
                         }
                     }
@@ -145,52 +191,5 @@
 
             return false;
         }
-
-        public bool IsCommandReady { get; set; }
-
-        public void AppendLine(string line)
-        {
-            if (RecognizeRegexStart.IsMatch(line))
-            {
-                var match = RecognizeRegexStart.Match(line);
-                this.name = match.Groups[1].ToString();
-            }
-            else if (RecognizeRegexEnd.IsMatch(line))
-            {
-                if (this.polygonPoints.Count >= 3)
-                {
-                    this.polygon = new PolygonFigure(this.polygonPoints);
-                    this.IsCommandReady = true;
-                }
-                else
-                {
-                    throw new Exception("Количество точек полигона должно быть больше 2");
-                }
-            }
-            else if (RecognizeRegexAdd.IsMatch(line))
-            {
-                var match = RecognizeRegexAdd.Match(line);
-                var newPolygonPoint = new Point(
-                    Convert.ToDouble(match.Groups[1].Value),
-                    Convert.ToDouble(match.Groups[2].Value));
-                var isCoincided = this.polygonPoints.Contains(newPolygonPoint);
-                this.polygonPoints.Add(newPolygonPoint);
-                
-                if (IsIntersection(this.polygonPoints) || isCoincided)
-                {
-                    throw new Exception("Точка полигона совпадает с одной из предыдущих или образует пересечение с одной из предыдущих сторон");
-                }                 
-            }
-            else
-            {
-                throw new Exception("Неправильный формат ввода данных");
-            }
-        }
-
-        public ICommand GetCommand()
-        {
-            return new AddFigureCommand(this.name, this.polygon);
-        }
-
     }
 }
